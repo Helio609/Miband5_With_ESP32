@@ -1,0 +1,28 @@
+#ifndef __UUID_H
+#define __UUID_H
+#include <NimBLEUUID.h>
+
+// 认证服务
+NimBLEUUID authServUUID("0000fee1-0000-1000-8000-00805f9b34fb");
+NimBLEUUID authCharUUID("00000009-0000-3512-2118-0009af100700");
+
+// 状态服务
+NimBLEUUID statusServUUID("0000fee0-0000-1000-8000-00805f9b34fb");
+NimBLEUUID statusCharUUID("00000007-0000-3512-2118-0009af100700");
+
+// 心率服务
+NimBLEUUID heartRateServUUID("0000180d-0000-1000-8000-00805f9b34fb");
+NimBLEUUID heartRateCharUUID("2A37");
+
+// 通知服务
+NimBLEUUID alertServUUID("00001811-0000-1000-8000-00805f9b34fb");
+NimBLEUUID alertCharUUID("2A46");
+
+// 语音服务
+NimBLEUUID voiceControlServUUID("0000fee0-0000-1000-8000-00805f9b34fb");
+NimBLEUUID voiceControlChar1UUID("00000012-0000-3512-2118-0009af100700"); // Just Read Once
+NimBLEUUID voiceControlChar2UUID("00000001-0000-3512-2118-0009af100700"); // 状态变换
+NimBLEUUID voiceControlChar3UUID("00000002-0000-3512-2118-0009af100700"); // 语音数据
+
+
+#endif
