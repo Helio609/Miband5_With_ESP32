@@ -5,13 +5,13 @@
 #include "Config.h"
 
 class MibandNotifyCallbacks {
-public:
+  public:
 	static void authNotifyCallback(NimBLERemoteCharacteristic *pBLERemoteCharacteristic,uint8_t *pData,size_t length,bool isNotify);
-  static void statusNotifyCallback(NimBLERemoteCharacteristic *pBLERemoteCharacteristic,uint8_t *pData,size_t length,bool isNotify);
-  static void heartRateNotifyCallback(NimBLERemoteCharacteristic *pBLERemoteCharacteristic,uint8_t *pData,size_t length,bool isNotify);
-  static void voiceControlChar1NotifyCallback(NimBLERemoteCharacteristic *pBLERemoteCharacteristic,uint8_t *pData,size_t length,bool isNotify);
-  static void voiceControlChar2NotifyCallback(NimBLERemoteCharacteristic *pBLERemoteCharacteristic,uint8_t *pData,size_t length,bool isNotify);
-  static void voiceControlChar3NotifyCallback(NimBLERemoteCharacteristic *pBLERemoteCharacteristic,uint8_t *pData,size_t length,bool isNotify);
+  	static void statusNotifyCallback(NimBLERemoteCharacteristic *pBLERemoteCharacteristic,uint8_t *pData,size_t length,bool isNotify);
+  	static void heartRateNotifyCallback(NimBLERemoteCharacteristic *pBLERemoteCharacteristic,uint8_t *pData,size_t length,bool isNotify);
+  	static void voiceControlChar1NotifyCallback(NimBLERemoteCharacteristic *pBLERemoteCharacteristic,uint8_t *pData,size_t length,bool isNotify);
+  	static void voiceControlChar2NotifyCallback(NimBLERemoteCharacteristic *pBLERemoteCharacteristic,uint8_t *pData,size_t length,bool isNotify);
+  	static void voiceControlChar3NotifyCallback(NimBLERemoteCharacteristic *pBLERemoteCharacteristic,uint8_t *pData,size_t length,bool isNotify);
 };
 
 class ClientCallbacks : public NimBLEClientCallbacks {
