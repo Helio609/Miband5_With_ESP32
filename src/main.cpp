@@ -6,9 +6,9 @@
 #include "Utils.h"
 
 void setup() {
-  	log_i("程序启动");
-
 	NimBLEDevice::init("ESP32");
+	NimBLEDevice::setSecurityAuth(BLE_SM_PAIR_AUTHREQ_BOND);
+	NimBLEDevice::setPower(ESP_PWR_LVL_P9);
 
 	mibandClient = NimBLEDevice::createClient();
 	mibandClient->setClientCallbacks(new ClientCallbacks());
@@ -33,8 +33,7 @@ void loop() {
 			NimBLERemoteCharacteristic* authChar = authServ->getCharacteristic(authCharUUID);
 			
 			authChar->subscribe(true,MibandNotifyCallbacks::authNotifyCallback);
-			uint8_t startAuth[] = {0x01,0x00};
-			authChar->writeValue(startAuth);
+			MibandNotifyCallbacks::authNotifyCallback(authChar,nullptr,0,true);
 
 			// 获取并注册状态回调事件
 			NimBLERemoteService* statusServ = mibandClient->getService(statusServUUID);

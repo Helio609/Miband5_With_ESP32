@@ -49,13 +49,11 @@ void AdvertisedDeviceCallbacks::onResult(NimBLEAdvertisedDevice* advertisedDevic
 
 void MibandNotifyCallbacks::authNotifyCallback(NimBLERemoteCharacteristic *pBLERemoteCharacteristic,uint8_t *pData,size_t length,bool isNotify) {
     log_i("手环认证回调");
-    log_printf("[Data Length=%d] ",length);
-    
-    for(int i = 0;i < length;++i) {
-        log_printf("%02x ",pData[i]);
-    }
-    log_printf("\n");
-    if(length == 20 && pData[0] == 0x10 && pData[1] == 0x01 && pData[2] == 0x81) {
+    logHex(pData,length);
+    if(length == 0) { // Start verification
+        uint8_t startAuth[] = {0x01,0x00};
+        pBLERemoteCharacteristic->writeValue(startAuth);
+    }else if(length == 20 && pData[0] == 0x10 && pData[1] == 0x01 && pData[2] == 0x81) {
         uint8_t reqRndNun[] = {0x82,0x00,0x02};
         pBLERemoteCharacteristic->writeValue(reqRndNun);
     }else if(length == 19 && pData[0] == 0x10 && pData[1] == 0x82 && pData[2] == 0x01) {
@@ -77,77 +75,47 @@ void MibandNotifyCallbacks::authNotifyCallback(NimBLERemoteCharacteristic *pBLER
     }else if(length == 3 && pData[0] == 0x10 && pData[1] == 0x83 && pData[2] == 0x08) {
         log_i("手环认证失败");
         uint8_t reqRndNun[] = {0x82,0x00,0x02};
-        pBLERemoteCharacteristic->writeValue(reqRndNun);
+        pBLERemoteCharacteristic->writeValue(reqRndNun,3);
     }
 }
 
 void MibandNotifyCallbacks::statusNotifyCallback(NimBLERemoteCharacteristic *pBLERemoteCharacteristic,uint8_t *pData,size_t length,bool isNotify) {
     log_i("手环状态回调");
-    log_printf("[Data Length=%d] ",length);
-    
-    for(int i = 0;i < length;++i) {
-        log_printf("%02x ",pData[i]);
-    }
-    log_printf("\n");
-
-    uint8_t low = pData[2];
-    uint8_t high = pData[1];
-    int val = (high & 0x0000ffff) * pow(16,0) + (high & 0xffff0000) * pow(16,1)
-            + (low  & 0x0000ffff) * pow(16,2) + (low  & 0xffff0000) * pow(16,3);
+    logHex(pData,length);
+    uint8_t low = pData[1];
+    uint8_t high = pData[2];
+    uint16_t val = (high << 8) | low;
     log_i("当前步数: %d步",val);
 
-    low = pData[10];
-    high = pData[9];
-    val = (high & 0x0000ffff) * pow(16,0) + (high & 0xffff0000) * pow(16,1)
-        + (low  & 0x0000ffff) * pow(16,2) + (low  & 0xffff0000) * pow(16,3);
+    low = pData[9];
+    high = pData[10];
+    val = (high << 8) | low;
     log_i("当前消耗: %d千卡",val);
 
-    low = pData[6];
-    high = pData[5];
-    val = (high & 0x0000ffff) * pow(16,0) + (high & 0xffff0000) * pow(16,1)
-        + (low  & 0x0000ffff) * pow(16,2) + (low  & 0xffff0000) * pow(16,3);
+    low = pData[5];
+    high = pData[6];
+    val = (high << 8) | low;
     log_i("当前距离: %d千米",val / 1000);
 }
 
 void MibandNotifyCallbacks::heartRateNotifyCallback(NimBLERemoteCharacteristic *pBLERemoteCharacteristic,uint8_t *pData,size_t length,bool isNotify) {
     log_i("手环心率回调");
-    log_printf("[Data Length=%d] ",length);
-    
-    for(int i = 0;i < length;++i) {
-        log_printf("%02x ",pData[i]);
-    }
-    log_printf("\n");
-
+    logHex(pData,length);
     uint8_t val = pData[1];
     log_i("当前心率: %dbpm",val);
 }
 
 void MibandNotifyCallbacks::voiceControlChar1NotifyCallback(NimBLERemoteCharacteristic *pBLERemoteCharacteristic,uint8_t *pData,size_t length,bool isNotify) {
     log_i("手环语音回调-1");
-    log_printf("[Data Length=%d] ",length);
-    
-    for(int i = 0;i < length;++i) {
-        log_printf("%02x ",pData[i]);
-    }
-    log_printf("\n");
+    logHex(pData,length);
 }
 
 void MibandNotifyCallbacks::voiceControlChar2NotifyCallback(NimBLERemoteCharacteristic *pBLERemoteCharacteristic,uint8_t *pData,size_t length,bool isNotify) {
     log_i("手环语音回调-2");
-    log_printf("[Data Length=%d] ",length);
-    
-    for(int i = 0;i < length;++i) {
-        log_printf("%02x ",pData[i]);
-    }
-    log_printf("\n");
+    logHex(pData,length);
 }
 
 void MibandNotifyCallbacks::voiceControlChar3NotifyCallback(NimBLERemoteCharacteristic *pBLERemoteCharacteristic,uint8_t *pData,size_t length,bool isNotify) {
     log_i("手环语音回调-3");
-    log_printf("[Data Length=%d] ",length);
-    
-    for(int i = 0;i < length;++i) {
-        log_printf("%02x ",pData[i]);
-    }
-    log_printf("\n");
+    logHex(pData,length);
 }

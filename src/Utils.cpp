@@ -23,3 +23,12 @@ void getMsgPacket(char* title,char* content,uint8_t* out,int& length) {
     }
     log_printf("\n");
 }
+
+void logHex(uint8_t* pData,uint16_t length) {
+    log_printf("[Data Length=%d] ",length);
+    
+    for(int i = 0;i < length;++i) {
+        log_printf("%02x ",pData[i]);
+    }
+    log_printf("\n");
+}
