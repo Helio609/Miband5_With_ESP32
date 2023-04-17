@@ -52,10 +52,10 @@ void MibandNotifyCallbacks::authNotifyCallback(NimBLERemoteCharacteristic *pBLER
     logHex(pData,length);
     if(length == 0) { // Start verification
         uint8_t startAuth[] = {0x01,0x00};
-        pBLERemoteCharacteristic->writeValue(startAuth);
+        pBLERemoteCharacteristic->writeValue(startAuth, 2);
     }else if(length == 20 && pData[0] == 0x10 && pData[1] == 0x01 && pData[2] == 0x81) {
         uint8_t reqRndNun[] = {0x82,0x00,0x02};
-        pBLERemoteCharacteristic->writeValue(reqRndNun);
+        pBLERemoteCharacteristic->writeValue(reqRndNun, 3);
     }else if(length == 19 && pData[0] == 0x10 && pData[1] == 0x82 && pData[2] == 0x01) {
         uint8_t inbuf[16] = {0};
         uint8_t outbuf[16] = {0};
@@ -69,13 +69,13 @@ void MibandNotifyCallbacks::authNotifyCallback(NimBLERemoteCharacteristic *pBLER
         for(int i = 0 ; i < 16 ; ++i) {
             rspAuthkey[i + 2] = outbuf[i];
         }
-        pBLERemoteCharacteristic->writeValue(rspAuthkey);
+        pBLERemoteCharacteristic->writeValue(rspAuthkey, 18);
     }else if(length == 3 && pData[0] == 0x10 && pData[1] == 0x83 && pData[2] == 0x01) {
         log_i("手环认证成功");
     }else if(length == 3 && pData[0] == 0x10 && pData[1] == 0x83 && pData[2] == 0x08) {
         log_i("手环认证失败");
         uint8_t reqRndNun[] = {0x82,0x00,0x02};
-        pBLERemoteCharacteristic->writeValue(reqRndNun,3);
+        pBLERemoteCharacteristic->writeValue(reqRndNun, 3);
     }
 }
 
@@ -103,19 +103,4 @@ void MibandNotifyCallbacks::heartRateNotifyCallback(NimBLERemoteCharacteristic *
     logHex(pData,length);
     uint8_t val = pData[1];
     log_i("当前心率: %dbpm",val);
-}
-
-void MibandNotifyCallbacks::voiceControlChar1NotifyCallback(NimBLERemoteCharacteristic *pBLERemoteCharacteristic,uint8_t *pData,size_t length,bool isNotify) {
-    log_i("手环语音回调-1");
-    logHex(pData,length);
-}
-
-void MibandNotifyCallbacks::voiceControlChar2NotifyCallback(NimBLERemoteCharacteristic *pBLERemoteCharacteristic,uint8_t *pData,size_t length,bool isNotify) {
-    log_i("手环语音回调-2");
-    logHex(pData,length);
-}
-
-void MibandNotifyCallbacks::voiceControlChar3NotifyCallback(NimBLERemoteCharacteristic *pBLERemoteCharacteristic,uint8_t *pData,size_t length,bool isNotify) {
-    log_i("手环语音回调-3");
-    logHex(pData,length);
 }
